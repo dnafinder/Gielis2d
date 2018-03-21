@@ -79,58 +79,22 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 function edit7_Callback(hObject, ~, ~)
-tmp=str2double(get(hObject,'String')); %get value of the text control
-validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && (x ~= 0) && ~isnan(x) && ~isempty(x);
-if ~validation(tmp) %if is not a number...
-    msgbox('A must be a real, finite and ~=0 number','Error','error'); %set the default value in text control 
-    set(hObject, 'String', '1'); %and in the parameter array
-    uicontrol(hObject)
-end
+checkparameter(hObject,1)
 
 function edit8_Callback(hObject, ~, ~)
-tmp=str2double(get(hObject,'String')); %get value of the text control
-validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && (x ~= 0) && ~isnan(x) && ~isempty(x);
-if ~validation(tmp) %if is not a number...
-    msgbox('B must be a real, finite and ~=0 number','Error','error'); %set the default value in text control 
-    set(hObject, 'String', '1'); %and in the parameter array
-    uicontrol(hObject)
-end
+checkparameter(hObject,2)
 
 function edit9_Callback(hObject, ~, ~)
-tmp=str2double(get(hObject,'String')); %get value of the text control
-validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && ~isnan(x) && ~isempty(x);
-if ~validation(tmp) %if is not a number...
-    msgbox('M must be a real and finite number','Error','error'); %set the default value in text control 
-    set(hObject, 'String', '0'); %and in the parameter array
-    uicontrol(hObject)
-end
+checkparameter(hObject,3)
 
 function edit10_Callback(hObject, ~, ~)
-tmp=str2double(get(hObject,'String')); %get value of the text control
-validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && (x ~= 0) && ~isnan(x) && ~isempty(x) && x>0;
-if ~validation(tmp) %if is not a number...
-    msgbox('n1 must be a real, finite and positive number','Error','error'); %set the default value in text control 
-    set(hObject, 'String', '1'); %and in the parameter array
-    uicontrol(hObject)
-end
+checkparameter(hObject,4)
 
 function edit11_Callback(hObject, ~, ~)
-tmp=str2double(get(hObject,'String')); %get value of the text control
-validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && ~isnan(x) && ~isempty(x);
-if ~validation(tmp) %if is not a number...
-    msgbox('n2 must be a real and finite number','Error','error'); %set the default value in text control 
-    set(hObject, 'String', '0'); %and in the parameter array
-    uicontrol(hObject)
-end
+checkparameter(hObject,5)
 
 function edit12_Callback(hObject, ~, ~)
-tmp=str2double(get(hObject,'String')); %get value of the text control
-validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && ~isnan(x) && ~isempty(x);
-if ~validation(tmp) %if is not a number...
-    msgbox('n3 must be a real and finite number','Error','error'); %set the default value in text control 
-    set(hObject, 'String', '0'); %and in the parameter array
-    uicontrol(hObject)
-end
+checkparameter(hObject,6)
 
 function radiobutton7_Callback(~, ~, handles)
 set(handles.radiobutton8,'Value',0)
@@ -213,3 +177,22 @@ switch dr
         axis equal
         comet(x,y)
 end
+
+function checkparameter(hObject,flag)
+tmp=str2double(get(hObject,'String')); %get value of the text control
+p={'A' 'B' 'M' 'N1' 'N2' 'N3'};
+if ismember(flag,[1 2 4])
+    validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && ~isnan(x) && ~isempty(x) && (x ~= 0);
+    txt=strcat(p{flag},' parameter must be a real, finite and ~=0 number');
+    def='1';
+else
+    validation=@(x) isnumeric(x) && isreal (x) && isfinite(x) && ~isnan(x) && ~isempty(x);
+    txt=strcat(p{flag},' parameter must be a real and finite number');
+    def='0';
+end
+if ~validation(tmp) %if is not a valid number...
+    errordlg(txt,'Error','modal'); %set the default value in text control
+    set(hObject, 'String', def); %and in the parameter array
+    uicontrol(hObject)
+end
+return
