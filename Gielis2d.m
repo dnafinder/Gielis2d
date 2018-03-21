@@ -120,6 +120,10 @@ function radiobutton12_Callback(~, ~, handles)
 set(handles.radiobutton11,'Value',0)
 set(handles.radiobutton10,'Value',0)
 
+function pushbutton2_KeyPressFcn(~, eventdata, handles)
+if strcmp(eventdata.Key,'return')
+   pushbutton2_Callback([], [], handles)
+end
 
 function pushbutton2_Callback(~, ~, handles)
 a=str2double(get(handles.edit7,'String'));
