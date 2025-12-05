@@ -254,21 +254,32 @@ else
 end
 
 % Target axes (as specified by the .fig)
+% Target axes (as specified by the .fig)
 ax = handles.axes2;
+
+% Pulizia base dell'axes cartesiano
 axes(ax);
 cla(ax);
 
-% If a previous polaraxes exists, hide it by default
+% Se esiste una polaraxes precedente, la nascondiamo di default
 if isfield(handles,'pax2') && isgraphics(handles.pax2)
     try
         set(handles.pax2,'Visible','off');
     catch
+        % no-op
     end
 end
 
 switch dr
     case 1
-        % POLAR PLOT (modern replacement for deprecated polar)
+        % ---------- POLAR PLOT ----------
+        % Nascondi axes2 per evitare che copra la polaraxes
+        try
+            set(ax,'Visible','off');
+        catch
+            % no-op
+        end
+
         parentFig = ancestor(ax,'figure');
         axUnits = get(ax,'Units');
         axPos   = get(ax,'Position');
@@ -281,44 +292,70 @@ switch dr
         try
             set(handles.pax2,'Units',axUnits,'Position',axPos);
         catch
+            % no-op
         end
 
         try
             set(handles.pax2,'Color','none','Visible','on');
         catch
+            % no-op
         end
 
         cla(handles.pax2);
         polarplot(handles.pax2, theta, rho, 'LineWidth', 1.2);
-
         title(handles.pax2, ['Gielis 2D - ' curveName ' / ' plotName]);
 
     case 2
-        % XY PLOT
+        % ---------- XY PLOT ----------
+        % Ripristina axes2 e nascondi polaraxes
+        try
+            set(ax,'Visible','on');
+        catch
+            % no-op
+        end
+
         if isfield(handles,'pax2') && isgraphics(handles.pax2)
-            try, cla(handles.pax2); set(handles.pax2,'Visible','off'); end
+            try
+                cla(handles.pax2);
+                set(handles.pax2,'Visible','off');
+            catch
+                % no-op
+            end
         end
 
         [x,y] = pol2cart(theta, rho);
+        cla(ax);
         plot(ax, x, y, 'LineWidth', 1.2);
         axis(ax, 'equal');
         axis(ax, 'tight');
-
         title(ax, ['Gielis 2D - ' curveName ' / ' plotName]);
 
     case 3
-        % COMET PLOT
+        % ---------- COMET PLOT ----------
+        % Ripristina axes2 e nascondi polaraxes
+        try
+            set(ax,'Visible','on');
+        catch
+            % no-op
+        end
+
         if isfield(handles,'pax2') && isgraphics(handles.pax2)
-            try, cla(handles.pax2); set(handles.pax2,'Visible','off'); end
+            try
+                cla(handles.pax2);
+                set(handles.pax2,'Visible','off');
+            catch
+                % no-op
+            end
         end
 
         [x,y] = pol2cart(theta, rho);
+        cla(ax);
         comet(ax, x, y);
         axis(ax, 'equal');
         axis(ax, 'tight');
-
         title(ax, ['Gielis 2D - ' curveName ' / ' plotName]);
 end
+
 
 % Update handles structure
 handles.output = hObject;
