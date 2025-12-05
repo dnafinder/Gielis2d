@@ -7,7 +7,7 @@ Reference:
 Gielis, J. (2003). A generic geometric transformation that unifies a wide range of natural and abstract shapes. American Journal of Botany, 90(3), 333–338.
 
 ## 🖼️ GUI Preview
-![Gielis2d GUI](Gielis2d.jpg)
+![Gielis2d GUI](https://github.com/dnafinder/Gielis2d/blob/master/Gielis2d.jpg)
 
 ## ✨ What this GUI does
 - Lets you set the six superformula parameters:
